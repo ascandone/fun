@@ -1,13 +1,13 @@
 use "ast.sml";
 
-datatype 'var env =
+datatype ''var env =
   EmptyEnv
-  | aug of 'var env * 'var binding
-and 'var binding = <- of 'var * 'var ast
+  | aug of ''var env * ''var binding
+and ''var binding = <- of ''var * ''var ast
 
-datatype 'var vals = 
+datatype ''var vals = 
   Const of int
-  | Closure of 'var * 'var ast * 'var env
+  | Closure of ''var * ''var ast * ''var env
 
 fun env |- p = case p of
   SConst k => Const k

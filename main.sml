@@ -1,5 +1,5 @@
 use "ast.sml";
-use "eagerStatic.sml";
+use "lazyStatic.sml";
 
 datatype myvars = x | y | z
 
