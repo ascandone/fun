@@ -1,5 +1,5 @@
 use "ast.sml";
-use "lazyStatic.sml";
+use "eagerStatic.sml";
 
 datatype myvars = x | y | z
 
@@ -11,10 +11,13 @@ val id = x ~> Var x
 val p2 = apply id (SConst 42)
 val es = x := SConst 7 @@ Apply (y ~> (x := SConst 4 @@ (Apply (Var y, SConst 9))), z ~> Var x)
 val es1 = apply (x ~> apply (Var x)(Var x)) (x ~> apply (Var x) (Var x))
+val t = x := es1 @@ SConst 7
 val p3 = apply (x ~> SConst 7) (Var x)
 
 (* let x = x in x *)
 val selfDef = x := Var x @@ Var x
+
+val p4 = x := SConst 42 @@ apply (y ~> Var x) (SConst 0)
 
 (*
 

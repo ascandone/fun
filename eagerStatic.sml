@@ -9,10 +9,6 @@ datatype 'var vals =
   Const of int
   | Closure of 'var * 'var ast * ('var, 'var vals) env
 
-infix 5 ++
-fun env ++ EmptyEnv = env
-  | env ++ (env' aug b) = env ++ env' aug b
-
 fun env |- p = case p of
   SConst k => Const k
   | Var x => (case env of
@@ -26,5 +22,5 @@ fun env |- p = case p of
   | Let (x, m, n) => (env aug (x <- (env |- m))) |- n
   | param ~> body => Closure (param, body, env)
   | Apply (f, arg) => (case (env |- f, env |- arg) of
-    (Closure (x, m', env'), v) => env ++ env' aug (x <- v) |- m'
+    (Closure (x, m', env'), v) => env' aug (x <- v) |- m'
     | _ => raise Parsing)
