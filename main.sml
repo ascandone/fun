@@ -1,7 +1,7 @@
 use "ast.sml";
 use "lazyStatic.sml";
 
-datatype myvars = x | y | z
+datatype myvars = x | y | z | f
 
 fun eval p = EmptyEnv |- p
 
@@ -18,6 +18,7 @@ val p3 = apply (x ~> SConst 7) (Var x)
 val selfDef = x := Var x @@ Var x
 
 val p4 = x := SConst 42 @@ apply (y ~> Var x) (SConst 0)
+val p5 = f := (x := SConst 42 @@ (y ~> Var x)) @@ (x := SConst 0 @@ apply (Var f) (SConst 100))
 
 (*
 
@@ -38,14 +39,25 @@ val recur = "f" := ("x" ~> apply (Var "f") (Var "x")) @@ apply (Var "f") (SConst
 (* Church encodings *)
 val cZero = "_" ~> "y" ~> Var "y"
 val cSucc = "n" ~> "x" ~> "y" ~> apply (Var "x") (apply2 (Var "n") (Var "x") (Var "y"))
-
 val cOne = apply cSucc cZero
+
+val expn = "x" ~> apply (Var "x") (Var "x")
+val oneone = apply expn cOne
 
 val cTrue = "x" ~> "_" ~> Var "x"
 val cFalse = "_" ~> "y" ~> Var "y"
 
 val pair = "x" ~> "y" ~> "b" ~> apply2 (Var "b") (Var "x") (Var "y")
-
 val fst = "pair" ~> apply (Var "pair") cTrue
 val snd = "pair" ~> apply (Var "pair") cFalse
+
+
+val inflist = "zeros" := apply2 pair (SConst 0) (Var "zeros") @@ SConst 0
+
+val inflist2 = "zeros" := apply2 pair (SConst 0) (Var "zeros") @@ apply fst (Var "zeros")
+
+val inflist2' = "zeros" := (apply2 pair (SConst 0) (SConst 1)) @@ (apply fst (Var "zeros"))
+
+val pairTest = apply fst (apply2 pair (SConst 0) (SConst 1))
+
 
